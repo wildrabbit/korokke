@@ -7,6 +7,7 @@ public class Pug : MonoBehaviour, IEntity
     SpriteRenderer spriteRendererRef;
     GameplayManager gameplayMgr;
 
+    public float defaultViewRotation;
     public BoidData boidData;
     List<IBoidSteeringBehaviour> steerSequence;
 
@@ -27,15 +28,15 @@ public class Pug : MonoBehaviour, IEntity
         transform.position = boidData.pos;
         boidData.target = gameplayMgr.GetKorokkePosition();
         // Register default steer sequence.
-        steerSequence.Add(new FleeBehaviour());
+        steerSequence.Add(new SeekBehaviour());
     }
 
     public void LogicUpdate(float dt)
     {
         boidData.target = gameplayMgr.GetKorokkePosition();
         UpdateMotion(dt);
-        //if (Vector2.Distance(boidData.pos, boidData.target) < 0.1f)
-        if (Vector2.Distance(boidData.pos, boidData.target) > 10.0f)
+        if (Vector2.Distance(boidData.pos, boidData.target) < 0.1f)
+        //if (Vector2.Distance(boidData.pos, boidData.target) > 10.0f)
         {
             boidData.velocity = Vector2.zero;
             steerSequence.Clear();
@@ -55,6 +56,8 @@ public class Pug : MonoBehaviour, IEntity
         {
             boidData.heading = boidData.velocity.normalized;
             boidData.side = new Vector2(boidData.velocity.y, -boidData.velocity.x).normalized;
+            float angle = Vector2.SignedAngle(boidData.heading, Vector2.right) + defaultViewRotation;
+            transform.rotation = Quaternion.AngleAxis(angle, Vector3.back);
         }
 
         // Check if wrap??
