@@ -18,7 +18,8 @@ public class Pug : MonoBehaviour, IEntity
     public void Init(GameplayManager gpMgr)
     {
         gameplayMgr = gpMgr;
-        transform.SetParent(gameplayMgr.sceneRoot);
+        transform.SetParent(gameplayMgr.pugRoot);
+        name = string.Format("pug_{0:00}", GameplayManager.NextPugID);
         steerSequence = new List<IBoidSteeringBehaviour>();
     }
 

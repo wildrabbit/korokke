@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class GameplayManager : MonoBehaviour
 {
+    public static int NextPugID = 0;
+
     [Header("Config")]
     public Transform sceneRoot;
+    public Transform pugRoot;
     public Vector3 korokkePosition;
     public int maxPugs = 30;
     public float minSpawnDelay = 0.2f;
@@ -76,6 +79,8 @@ public class GameplayManager : MonoBehaviour
 
                 elapsedSpawners[i] = 0;
                 spawnDelays[i] = Random.Range(minSpawnDelay, maxSpawnDelay);
+
+                NextPugID++;
 
                 if (pugs.Count == maxPugs) break;
             }

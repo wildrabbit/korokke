@@ -60,7 +60,7 @@ MonoBehaviour:
     heading: {x: 0, y: 0}
     side: {x: 0, y: 0}
     mass: 1
-    maxSpeed: 2
+    maxSpeed: 3.5
     maxForce: 2
     maxAngularSpeed: 0
     target: {x: 0, y: 0}
