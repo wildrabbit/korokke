@@ -79,4 +79,9 @@ public class GameplayManager : MonoBehaviour
             p.Kill();
         }
     }
+
+    public Vector2 GetKorokkePosition()
+    {
+        return korokke.transform.position;
+    }
 }

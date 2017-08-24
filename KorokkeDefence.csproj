@@ -90,6 +90,8 @@
     <Compile Include="Assets\scripts\GameplayManager.cs" />
     <Compile Include="Assets\scripts\IEntity.cs" />
     <Compile Include="Assets\scripts\Korokke.cs" />
+    <Compile Include="Assets\scripts\moarBoids\BoidData.cs" />
+    <Compile Include="Assets\scripts\moarBoids\BoidSteeringBehaviour.cs" />
     <Compile Include="Assets\scripts\Pug.cs" />
     <Compile Include="Assets\TouchScript\Examples\_misc\Scripts\Checker.cs" />
     <Compile Include="Assets\TouchScript\Examples\_misc\Scripts\ExamplesList.cs" />

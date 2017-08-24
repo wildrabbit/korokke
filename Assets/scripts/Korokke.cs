@@ -20,6 +20,8 @@ public class Korokke : MonoBehaviour, IEntity
     public void Init(GameplayManager gameplayMgrRef)
     {
         gameplayMgr = gameplayMgrRef;
+        name = gameplayMgr.korokkePrefab.name;
+        transform.SetParent(gameplayMgr.sceneRoot);
         transform.position = gameplayMgr.korokkePosition;
     }
 
