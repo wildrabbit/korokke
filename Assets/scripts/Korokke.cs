@@ -12,8 +12,6 @@ public class Korokke : MonoBehaviour, IEntity
     SpriteRenderer spriteRendererRef;
     GameplayManager gameplayMgr;
 
-    
-
     private void Awake()
     {
         spriteRendererRef = GetComponent<SpriteRenderer>();
@@ -29,6 +27,11 @@ public class Korokke : MonoBehaviour, IEntity
     public void StartGame()
     {
         korokke = maxKorokke;
+    }
+
+    public void StopGame()
+    {
+
     }
 
     public void LogicUpdate(float dt)

@@ -5,4 +5,6 @@ public interface IEntity
     void LogicUpdate(float dt);
     void Cleanup();
     void Kill(float delay = 0.0f);
+    void StartGame();
+    void StopGame();
 }
