@@ -4,20 +4,35 @@ using System.Collections.Generic;
 using UnityEngine;
 using TouchScript.Gestures;
 
+enum PugState
+{
+    SeekKorokke = 0,
+    Escape
+}
+
 public class Pug : MonoBehaviour, IEntity
 {
-    SpriteRenderer spriteRendererRef;
+    delegate Vector2 SteerFunction(BoidData d);
+
+    //SpriteRenderer spriteRendererRef;
     GameplayManager gameplayMgr;
     TapGesture tapGesture;
 
     public float defaultViewRotation;
+    public float escapeSpeedIncrease = 1.5f;
     public BoidData boidData;
 
+    PugState state;
+
+    public bool Escaping
+    {
+        get { return state == PugState.Escape; }
+    }
 
 
     private void Awake()
     {
-        spriteRendererRef = GetComponent<SpriteRenderer>();
+        //spriteRendererRef = GetComponent<SpriteRenderer>();
         tapGesture = GetComponent<TapGesture>();
     }
     public void Init(GameplayManager gpMgr)
@@ -33,6 +48,7 @@ public class Pug : MonoBehaviour, IEntity
         transform.position = boidData.pos;
         boidData.target = gameplayMgr.GetKorokkeMotionData();
         tapGesture.Tapped += OnTap;
+        state = PugState.SeekKorokke;
     }
 
     public void OnTap(object o, EventArgs args)
@@ -42,20 +58,37 @@ public class Pug : MonoBehaviour, IEntity
     }
 
     public void LogicUpdate(float dt)
-    {
+    {        
         boidData.target = gameplayMgr.GetKorokkeMotionData();
         UpdateMotion(dt);
     }
 
     void UpdateMotion(float dt)
     {
-        if (boidData.target == null || Vector2.Distance(boidData.pos, boidData.target.pos) < gameplayMgr.korokkeDistanceThreshold)
-        {
-            boidData.velocity = Vector2.zero;
-            return;
-        }
-
         Vector2 steerForce = CalculateTotalSteering(dt);
+
+        switch (state)
+        {
+            case PugState.SeekKorokke:
+                {
+                    if (boidData.target == null || Vector2.Distance(boidData.pos, boidData.target.pos) < gameplayMgr.korokkeDistanceThreshold)
+                    {
+                        return;
+                    }
+                    break;
+                }
+            case PugState.Escape:
+                {
+                    if (boidData.target != null && Vector2.Distance(boidData.pos, boidData.target.pos) > gameplayMgr.korokkeEscapeThreshold)
+                    {
+                        boidData.maxSpeed *= escapeSpeedIncrease;
+                        tapGesture.Tapped -= OnTap;
+                        gameplayMgr.PugEscaped(this);
+                    }
+                    break;
+                }
+        }
+        
         boidData.acceleration = steerForce / boidData.mass;
         boidData.velocity += boidData.acceleration * dt;
         Vector2.ClampMagnitude(boidData.velocity, boidData.maxSpeed);
@@ -75,7 +108,8 @@ public class Pug : MonoBehaviour, IEntity
 
     Vector2 CalculateTotalSteering(float dt)
     {
-        Vector2 result = BoidSteeringFunctions.ApplyJitter(boidData, BoidSteeringFunctions.Arrive(boidData), gameplayMgr.boidJitter, gameplayMgr.boidRadius, gameplayMgr.boidDistance);
+        SteerFunction[] functions = new SteerFunction[] { BoidSteeringFunctions.Arrive, BoidSteeringFunctions.Flee};
+        Vector2 result = BoidSteeringFunctions.ApplyJitter(boidData, functions[(int)state](boidData), gameplayMgr.boidJitter, gameplayMgr.boidRadius, gameplayMgr.boidDistance);
         return result;
     }
 
@@ -84,10 +118,15 @@ public class Pug : MonoBehaviour, IEntity
 
     }
 
+    public void StokeKorokke()
+    {
+        state = PugState.Escape;
+    }
+
     // Use this for initialization
     public void Cleanup()
     {
-        spriteRendererRef = null;
+        //spriteRendererRef = null;
         gameplayMgr = null;
     }
 

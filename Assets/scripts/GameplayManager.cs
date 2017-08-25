@@ -18,6 +18,7 @@ public class GameplayManager : MonoBehaviour
     public Vector3 korokkePosition;
 
     public float korokkeDistanceThreshold = 0.25f;
+    public float korokkeEscapeThreshold = 10.0f;
 
     public float spawnerRadius = 0.15f;
     public float maxSpeedPercentage = 2.0f;
@@ -74,11 +75,12 @@ public class GameplayManager : MonoBehaviour
         int eatenCroquettes = 0;
         foreach (Pug p in pugs)
         {
-            if (korokke.korokkeLeft == 0) continue;
+            if (korokke.korokkeLeft == 0 || p.Escaping) continue;
 
             if (Vector2.Distance(p.boidData.pos, korokke.data.pos) < korokkeDistanceThreshold)
             {
                 korokke.Hit();
+                p.StokeKorokke();
                 eatenCroquettes++;
             }
         }
@@ -228,6 +230,11 @@ public class GameplayManager : MonoBehaviour
     {
         // Replace with coroutine
         pugsLeft--;
+        entitiesToRemove.Add(p);
+    }
+
+    public void PugEscaped(Pug p)
+    {
         entitiesToRemove.Add(p);
     }
 

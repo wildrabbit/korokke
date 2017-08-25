@@ -9,13 +9,13 @@ public class Korokke : MonoBehaviour, IEntity
     
     public int korokkeLeft;
 
-    SpriteRenderer spriteRendererRef;
+    //SpriteRenderer spriteRendererRef;
     GameplayManager gameplayMgr;
     public BoidData data;
 
     private void Awake()
     {
-        spriteRendererRef = GetComponent<SpriteRenderer>();
+        //spriteRendererRef = GetComponent<SpriteRenderer>();
     }
 
     public void Init(GameplayManager gameplayMgrRef)
@@ -47,12 +47,14 @@ public class Korokke : MonoBehaviour, IEntity
 	
     public void Hit(int damage = 1)
     {
-        korokkeLeft = (damage > korokkeLeft) ? 0 : damage - korokkeLeft;
+        Debug.Log("Eating Korokke!");
+        korokkeLeft = (damage > korokkeLeft) ? 0 : korokkeLeft - damage;
+        Debug.Log($"Left: {korokkeLeft}");
     }
 
     public void Cleanup()
     {
-        spriteRendererRef = null;
+        //spriteRendererRef = null;
         gameplayMgr = null;
     }
 
