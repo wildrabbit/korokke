@@ -6,8 +6,16 @@ public class Korokke : MonoBehaviour, IEntity
 {
     [Header("Config")]
     public int maxKorokke = 3;
+
+    public float itemX = 0.2f;
+    public float itemY = 0.2f;
+
+    public Transform korokkeItemPrefab;
     
-    public int korokkeLeft;
+    [HideInInspector]
+    public int korokkeLeft;    
+    List<Transform> korokkes;
+    Transform plate;
 
     //SpriteRenderer spriteRendererRef;
     GameplayManager gameplayMgr;
@@ -16,6 +24,7 @@ public class Korokke : MonoBehaviour, IEntity
     private void Awake()
     {
         //spriteRendererRef = GetComponent<SpriteRenderer>();
+        plate = transform.Find("plate");
     }
 
     public void Init(GameplayManager gameplayMgrRef)
@@ -31,6 +40,18 @@ public class Korokke : MonoBehaviour, IEntity
     public void StartGame()
     {
         korokkeLeft = maxKorokke;
+        korokkes = new List<Transform>();
+        for (int i = 0; i < korokkeLeft; ++i)
+        {
+            Transform krok = Instantiate<Transform>(korokkeItemPrefab);
+            krok.SetParent(plate);
+            Vector2 pos = krok.position;
+            pos.x += Random.Range(-itemX, itemX);
+            pos.y += Random.Range(-itemY, itemY);
+            krok.position = pos;
+            krok.rotation = Quaternion.AngleAxis(Random.Range(0, 360), Vector3.forward);
+            korokkes.Add(krok);
+        }
     }
 
     public void StopGame()
@@ -50,6 +71,10 @@ public class Korokke : MonoBehaviour, IEntity
         Debug.Log("Eating Korokke!");
         korokkeLeft = (damage > korokkeLeft) ? 0 : korokkeLeft - damage;
         Debug.Log($"Left: {korokkeLeft}");
+        int idx = korokkes.Count - 1;
+        Transform krok = korokkes[idx];
+        korokkes.RemoveAt(idx);
+        Destroy(krok.gameObject);
     }
 
     public void Cleanup()

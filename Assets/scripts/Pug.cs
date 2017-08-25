@@ -81,8 +81,6 @@ public class Pug : MonoBehaviour, IEntity
                 {
                     if (boidData.target != null && Vector2.Distance(boidData.pos, boidData.target.pos) > gameplayMgr.korokkeEscapeThreshold)
                     {
-                        boidData.maxSpeed *= escapeSpeedIncrease;
-                        tapGesture.Tapped -= OnTap;
                         gameplayMgr.PugEscaped(this);
                     }
                     break;
@@ -118,8 +116,11 @@ public class Pug : MonoBehaviour, IEntity
 
     }
 
-    public void StokeKorokke()
+    public void StoleKorokke()
     {
+        boidData.maxSpeed *= escapeSpeedIncrease;
+        tapGesture.Tapped -= OnTap;
+
         state = PugState.Escape;
     }
 

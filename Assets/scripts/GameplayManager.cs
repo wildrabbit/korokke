@@ -80,7 +80,7 @@ public class GameplayManager : MonoBehaviour
             if (Vector2.Distance(p.boidData.pos, korokke.data.pos) < korokkeDistanceThreshold)
             {
                 korokke.Hit();
-                p.StokeKorokke();
+                p.StoleKorokke();
                 eatenCroquettes++;
             }
         }

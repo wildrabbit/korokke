@@ -446,6 +446,8 @@ MonoBehaviour:
   sceneRoot: {fileID: 1553753956}
   pugRoot: {fileID: 1474669633}
   korokkePosition: {x: 0, y: 0, z: 0}
+  korokkeDistanceThreshold: 0.5
+  korokkeEscapeThreshold: 10
   spawnerRadius: 2
   maxSpeedPercentage: 0.15
   boidJitter: 4

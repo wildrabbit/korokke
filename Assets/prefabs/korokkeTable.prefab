@@ -113,7 +113,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ead0cea0f5a07c7479e896994d4298f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxKorokke: 3
+  maxKorokke: 2
+  itemX: 0.3
+  itemY: 0.3
+  korokkeItemPrefab: {fileID: 4593149348942738, guid: 69243974eec0dd84e81650434a8b2fe0,
+    type: 2}
+  korokkeLeft: 0
   data:
     pos: {x: 0, y: 0}
     acceleration: {x: 0, y: 0}
