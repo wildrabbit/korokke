@@ -1,51 +1,60 @@
 ﻿using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using TouchScript.Gestures;
 
 public class Pug : MonoBehaviour, IEntity
 {
     SpriteRenderer spriteRendererRef;
     GameplayManager gameplayMgr;
+    TapGesture tapGesture;
 
     public float defaultViewRotation;
     public BoidData boidData;
-    List<IBoidSteeringBehaviour> steerSequence;
+
+
 
     private void Awake()
     {
         spriteRendererRef = GetComponent<SpriteRenderer>();
+        tapGesture = GetComponent<TapGesture>();
     }
     public void Init(GameplayManager gpMgr)
     {
         gameplayMgr = gpMgr;
         transform.SetParent(gameplayMgr.pugRoot);
         name = string.Format("pug_{0:00}", GameplayManager.NextPugID);
-        steerSequence = new List<IBoidSteeringBehaviour>();
     }
 
     public void StartGame()
     {
         // Set default boid values.
         transform.position = boidData.pos;
-        boidData.target = gameplayMgr.GetKorokkePosition();
-        // Register default steer sequence.
-        steerSequence.Add(new SeekBehaviour());
+        boidData.target = gameplayMgr.GetKorokkeMotionData();
+        tapGesture.Tapped += OnTap;
+    }
+
+    public void OnTap(object o, EventArgs args)
+    {
+        // Check type, whatever...
+        gameplayMgr.PugTapped(this);
     }
 
     public void LogicUpdate(float dt)
     {
-        boidData.target = gameplayMgr.GetKorokkePosition();
+        boidData.target = gameplayMgr.GetKorokkeMotionData();
         UpdateMotion(dt);
-        if (Vector2.Distance(boidData.pos, boidData.target) < 0.1f)
-        //if (Vector2.Distance(boidData.pos, boidData.target) > 10.0f)
-        {
-            boidData.velocity = Vector2.zero;
-            steerSequence.Clear();
-        }
     }
 
     void UpdateMotion(float dt)
     {
+        if (boidData.target == null || Vector2.Distance(boidData.pos, boidData.target.pos) < 0.25f)
+        {
+            boidData.velocity = Vector2.zero;
+            return;
+        }
+
         Vector2 steerForce = CalculateTotalSteering(dt);
         boidData.acceleration = steerForce / boidData.mass;
         boidData.velocity += boidData.acceleration * dt;
@@ -66,12 +75,7 @@ public class Pug : MonoBehaviour, IEntity
 
     Vector2 CalculateTotalSteering(float dt)
     {
-        Vector2 result = Vector2.zero;
-        foreach(IBoidSteeringBehaviour behaviour in steerSequence)
-        {
-            // Compose?
-            result += behaviour.Steer(dt, boidData);
-        }
+        Vector2 result = BoidSteeringFunctions.ApplyJitter(boidData, BoidSteeringFunctions.Arrive(boidData), gameplayMgr.boidJitter, gameplayMgr.boidRadius, gameplayMgr.boidDistance);
         return result;
     }
 

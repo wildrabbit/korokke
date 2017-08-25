@@ -11,6 +11,7 @@ public class Korokke : MonoBehaviour, IEntity
 
     SpriteRenderer spriteRendererRef;
     GameplayManager gameplayMgr;
+    public BoidData data;
 
     private void Awake()
     {
@@ -22,7 +23,8 @@ public class Korokke : MonoBehaviour, IEntity
         gameplayMgr = gameplayMgrRef;
         name = gameplayMgr.korokkePrefab.name;
         transform.SetParent(gameplayMgr.sceneRoot);
-        transform.position = gameplayMgr.korokkePosition;
+        data.pos = gameplayMgr.korokkePosition;
+        transform.position = data.pos;
     }
 
     // Use this for initialization
@@ -39,6 +41,8 @@ public class Korokke : MonoBehaviour, IEntity
     public void LogicUpdate(float dt)
     {
         if (korokke == 0) return;
+        // Just to be consistent: 
+        transform.position = data.pos;
     }
 	
     public void Hit(int damage = 1)

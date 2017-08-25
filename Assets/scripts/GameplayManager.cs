@@ -14,18 +14,23 @@ public class GameplayManager : MonoBehaviour
     public float minSpawnDelay = 0.2f;
     public float maxSpawnDelay = 0.8f;
 
-    public Transform[] pugSpawnPoints;
-
+    public float spawnerRadius = 0.15f;
+    public float maxSpeedPercentage = 2.0f;
+    public float boidJitter = 0.1f;
+    public float boidDistance = 2.0f;
+    public float boidRadius = 1.0f;
+    //The heading is the target.
+    
     [Header("Prefabs")]
     public Korokke korokkePrefab;
     public Pug pugPrefab;
 
-    //------------------------
-    float[] elapsedSpawners;
-    float[] spawnDelays;
-
     Korokke korokke;
     List<Pug> pugs;
+    List<Spawner> spawners;
+
+    List<IEntity> entitiesToRemove;
+
 	// Use this for initialization
 	void Start ()
     {
@@ -37,10 +42,9 @@ public class GameplayManager : MonoBehaviour
     {
         korokke.StartGame();
 
-        for (int i = 0; i < pugSpawnPoints.Length; ++i)
+        foreach(Spawner sp in spawners)
         {
-            elapsedSpawners[i] = 0.0f;
-            spawnDelays[i] = Random.Range(minSpawnDelay, maxSpawnDelay);
+            sp.StartGame();
         }
 
         foreach(Pug p in pugs)
@@ -55,35 +59,33 @@ public class GameplayManager : MonoBehaviour
         korokke.LogicUpdate(delta);
 
         // Update spawns
-        UpdateSpawns(delta);
+        UpdateSpawners(delta);
 
         foreach (Pug p in pugs)
         {
             p.LogicUpdate(delta);
         }
+
+        for (int i = 0; i < entitiesToRemove.Count; ++i)
+        {
+            if (entitiesToRemove[i] is Pug)
+            {
+                pugs.Remove((Pug)entitiesToRemove[i]);
+            }
+            else if (entitiesToRemove[i] is Spawner)
+            {
+                spawners.Remove((Spawner)entitiesToRemove[i]);
+            }
+            entitiesToRemove[i].Kill();
+        }
+        entitiesToRemove.Clear();
 	}
 
-    void UpdateSpawns(float delta)
+    void UpdateSpawners(float delta)
     {
-        if (pugs.Count >= maxPugs) return;
-        for (int i = 0; i < pugSpawnPoints.Length; ++i)
+        for (int i = 0; i < spawners.Count; ++i)
         {
-            elapsedSpawners[i] += delta;
-            if (elapsedSpawners[i] >= spawnDelays[i])
-            {
-                Pug p = Instantiate<Pug>(pugPrefab);
-                p.Init(this);
-                p.boidData.pos = pugSpawnPoints[i].position;
-                p.StartGame();
-                pugs.Add(p);
-
-                elapsedSpawners[i] = 0;
-                spawnDelays[i] = Random.Range(minSpawnDelay, maxSpawnDelay);
-
-                NextPugID++;
-
-                if (pugs.Count == maxPugs) break;
-            }
+            spawners[i].LogicUpdate(delta);
         }
     }
 
@@ -94,16 +96,25 @@ public class GameplayManager : MonoBehaviour
         {
             p.StopGame();
         }
+        foreach(Spawner sp in spawners)
+        {
+            sp.StopGame();
+        }
     }
 
     void BuildLevel()
     {
-        int numPoints = pugSpawnPoints.Length;
-        elapsedSpawners = new float[numPoints];
-        spawnDelays = new float[numPoints];
-
         korokke = Instantiate<Korokke>(korokkePrefab);
         korokke.Init(this);
+
+        Spawner[] sceneSpawners = FindObjectsOfType<Spawner>();
+        spawners = new List<Spawner>(sceneSpawners);
+        foreach(Spawner sp in spawners)
+        {
+            sp.Init(this);
+        }
+
+        entitiesToRemove = new List<IEntity>();
 
         Pug[] existingPugs = FindObjectsOfType<Pug>();
         pugs = new List<Pug>(existingPugs);
@@ -121,6 +132,12 @@ public class GameplayManager : MonoBehaviour
         korokke.Cleanup();
         korokke.Kill();
 
+        foreach (Spawner sp in spawners)
+        {
+            sp.Cleanup();
+            sp.Kill();
+        }
+
         foreach (Pug p in pugs)
         {
             p.Cleanup();
@@ -128,8 +145,38 @@ public class GameplayManager : MonoBehaviour
         }
     }
 
-    public Vector2 GetKorokkePosition()
+    public BoidData GetKorokkeMotionData()
     {
-        return korokke.transform.position;
+        return korokke.data;
+    }
+
+    public void SpawnPug(Vector2 spawnPos)
+    {
+        Pug p = Instantiate<Pug>(pugPrefab);
+        p.Init(this);
+        Vector2 pos = spawnPos;
+        float angle = Random.Range(0, 360);
+        pos.Set(pos.x + Mathf.Cos(angle), pos.y + Mathf.Sin(angle));
+
+        p.boidData.pos = pos;
+
+        float speedPercent = maxSpeedPercentage * p.boidData.maxSpeed;
+        p.boidData.maxSpeed += Random.Range(0.0f, speedPercent);
+
+        p.StartGame();
+        pugs.Add(p);
+        NextPugID++;
+    }
+
+    public void ExhaustedSpawner(Spawner spawn)
+    {
+        // Replace with coroutine
+        entitiesToRemove.Add(spawn);
+    }
+
+    public void PugTapped(Pug p)
+    {
+        // Replace with coroutine
+        entitiesToRemove.Add(p);
     }
 }
