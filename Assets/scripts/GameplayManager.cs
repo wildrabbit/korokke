@@ -103,7 +103,7 @@ public class GameplayManager : MonoBehaviour
         }
         else
         {
-            StartCoroutine(GameWon());
+            StartCoroutine(GameLost());
         }
         StopGame();
 
