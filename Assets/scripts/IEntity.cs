@@ -7,4 +7,6 @@ public interface IEntity
     void Kill(float delay = 0.0f);
     void StartGame();
     void StopGame();
+    void OnEntityAdded();
+    void OnEntityRemoved();
 }

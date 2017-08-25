@@ -30,6 +30,9 @@ public class Spawner : MonoBehaviour, IEntity
     {
         ResetSpawnCounter();
         pugsLeft = pugCount;
+
+        gameplayManager.pendingSpawners++;
+        gameplayManager.pugsLeft += pugsLeft;
     }
 
     void ResetSpawnCounter()
@@ -70,5 +73,14 @@ public class Spawner : MonoBehaviour, IEntity
     public void Kill(float delay = 0.0f)
     {
         Destroy(gameObject, delay);
-    }    
+    }
+
+    public void OnEntityAdded()
+    {
+        gameplayManager.AddSpawner(this);
+    }
+    public void OnEntityRemoved()
+    {
+        gameplayManager.RemoveSpawner(this);
+    }
 }

@@ -49,7 +49,7 @@ public class Pug : MonoBehaviour, IEntity
 
     void UpdateMotion(float dt)
     {
-        if (boidData.target == null || Vector2.Distance(boidData.pos, boidData.target.pos) < 0.25f)
+        if (boidData.target == null || Vector2.Distance(boidData.pos, boidData.target.pos) < gameplayMgr.korokkeDistanceThreshold)
         {
             boidData.velocity = Vector2.zero;
             return;
@@ -94,5 +94,14 @@ public class Pug : MonoBehaviour, IEntity
     public void Kill(float delay = 0.0f)
     {
         Destroy(gameObject, delay);
+    }
+
+    public void OnEntityAdded()
+    {
+        gameplayMgr.AddPug(this);
+    }
+    public void OnEntityRemoved()
+    {
+        gameplayMgr.RemovePug(this);
     }
 }

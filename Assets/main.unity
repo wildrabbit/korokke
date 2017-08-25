@@ -446,14 +446,13 @@ MonoBehaviour:
   sceneRoot: {fileID: 1553753956}
   pugRoot: {fileID: 1474669633}
   korokkePosition: {x: 0, y: 0, z: 0}
-  maxPugs: 30
-  minSpawnDelay: 0.2
-  maxSpawnDelay: 0.8
   spawnerRadius: 2
   maxSpeedPercentage: 0.15
   boidJitter: 4
   boidDistance: 2
   boidRadius: 3
+  pugsLeft: 0
+  pendingSpawners: 0
   korokkePrefab: {fileID: 114807190332247364, guid: a2a28d1c104884641b826eca9699b1c6,
     type: 2}
   pugPrefab: {fileID: 114104090520184960, guid: 5242fcda0fb8aab4b8a847686149bbd9,
@@ -550,34 +549,6 @@ Transform:
   m_PrefabParentObject: {fileID: 4802301769640970, guid: 297ccb68236e5884f95e6e226f4334e1,
     type: 2}
   m_PrefabInternal: {fileID: 2057081064}
---- !u!1 &2062204183
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 2062204184}
-  m_Layer: 0
-  m_Name: korokkeItem
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2062204184
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2062204183}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &2140738708 stripped
 Transform:
   m_PrefabParentObject: {fileID: 400002, guid: 1c4dd8a13f501b04f84fe824120f70bb, type: 2}
