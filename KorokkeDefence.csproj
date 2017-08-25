@@ -86,6 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\scripts\GameplayManager.cs" />
+    <Compile Include="Assets\scripts\HUDInGame.cs" />
     <Compile Include="Assets\scripts\IEntity.cs" />
     <Compile Include="Assets\scripts\Korokke.cs" />
     <Compile Include="Assets\scripts\moarBoids\BoidData.cs" />

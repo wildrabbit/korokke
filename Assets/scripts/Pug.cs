@@ -20,6 +20,7 @@ public class Pug : MonoBehaviour, IEntity
 
     public float defaultViewRotation;
     public float escapeSpeedIncrease = 1.5f;
+    public float escapeForceIncrease = 1.2f;
     public BoidData boidData;
 
     PugState state;
@@ -107,7 +108,7 @@ public class Pug : MonoBehaviour, IEntity
     Vector2 CalculateTotalSteering(float dt)
     {
         SteerFunction[] functions = new SteerFunction[] { BoidSteeringFunctions.Arrive, BoidSteeringFunctions.Flee};
-        Vector2 result = BoidSteeringFunctions.ApplyJitter(boidData, functions[(int)state](boidData), gameplayMgr.boidJitter, gameplayMgr.boidRadius, gameplayMgr.boidDistance);
+        Vector2 result = functions[(int)state](boidData); // BoidSteeringFunctions.ApplyJitter(boidData, functions[(int)state](boidData), gameplayMgr.boidJitter, gameplayMgr.boidRadius, gameplayMgr.boidDistance);
         return result;
     }
 
@@ -119,6 +120,7 @@ public class Pug : MonoBehaviour, IEntity
     public void StoleKorokke()
     {
         boidData.maxSpeed *= escapeSpeedIncrease;
+        boidData.maxForce *= escapeForceIncrease;
         tapGesture.Tapped -= OnTap;
 
         state = PugState.Escape;

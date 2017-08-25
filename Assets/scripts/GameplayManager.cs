@@ -1,6 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+using URandom = UnityEngine.Random;
 
 public enum LevelResult
 {
@@ -44,9 +47,17 @@ public class GameplayManager : MonoBehaviour
     List<IEntity> entitiesToAdd;
 
     bool running = false;
+    int escapees = 0;
 
-	// Use this for initialization
-	void Start ()
+    [HideInInspector]
+    public Action<int> OnKorokkeStolen;
+    [HideInInspector]
+    public Action<int> OnPugHit;
+    [HideInInspector]
+    public Action<int, int> OnGameStarted;
+
+    // Use this for initialization
+    void Start ()
     {
         BuildLevel();
         StartGame();
@@ -58,7 +69,12 @@ public class GameplayManager : MonoBehaviour
         {
             ent.StartGame();
         }
+        escapees = 0;
         running = true;
+        if (OnGameStarted != null)
+        {
+            OnGameStarted(pugsLeft, korokke.korokkeLeft);
+        }
     }
 	
 	// Update is called once per frame
@@ -81,7 +97,12 @@ public class GameplayManager : MonoBehaviour
             {
                 korokke.Hit();
                 p.StoleKorokke();
+                escapees++;
                 eatenCroquettes++;
+                if (OnKorokkeStolen != null)
+                {
+                    OnKorokkeStolen(korokke.korokkeLeft);
+                }
             }
         }
 
@@ -209,12 +230,12 @@ public class GameplayManager : MonoBehaviour
         p.Init(this);
 
         Vector2 pos = spawnPos;
-        float angle = Random.Range(0, 360);
+        float angle = URandom.Range(0, 360);
         pos.Set(pos.x + Mathf.Cos(angle), pos.y + Mathf.Sin(angle));
         p.boidData.pos = pos;
 
         float speedPercent = maxSpeedPercentage * p.boidData.maxSpeed;
-        p.boidData.maxSpeed += Random.Range(0.0f, speedPercent);
+        p.boidData.maxSpeed += URandom.Range(0.0f, speedPercent);
 
         entitiesToAdd.Add(p);
         NextPugID++;
@@ -231,21 +252,26 @@ public class GameplayManager : MonoBehaviour
         // Replace with coroutine
         pugsLeft--;
         entitiesToRemove.Add(p);
+        if (OnPugHit != null)
+        {
+            OnPugHit(pugsLeft);
+        }
     }
 
     public void PugEscaped(Pug p)
     {
+        escapees--;
         entitiesToRemove.Add(p);
     }
 
     public LevelResult CalculateResults()
     {
-        if (korokke.korokkeLeft == 0)
+        if (korokke.korokkeLeft == 0 && escapees == 0)
         {
             return LevelResult.Lost;
         }
         // All spawners depleted
-        else if (pendingSpawners == 0 && pugsLeft == 0)
+        if (pendingSpawners == 0 && pugsLeft == 0)
         {
             return LevelResult.Won;
         }

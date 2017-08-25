@@ -310,7 +310,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultViewRotation: 90
-  escapeSpeedIncrease: 2.5
+  escapeSpeedIncrease: 3
+  escapeForceIncrease: 2
   boidData:
     pos: {x: 0, y: 0}
     acceleration: {x: 0, y: 0}
