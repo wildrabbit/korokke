@@ -9,6 +9,7 @@ using URandom = UnityEngine.Random;
 public enum LevelResult
 {
     None = 0,
+    Perfect,
     Won,
     Lost
 }
@@ -78,7 +79,7 @@ public class GameplayManager : MonoBehaviour
     [HideInInspector]
     public Action<int, int> OnGameStarted;
     [HideInInspector]
-    public Action OnGameWon;
+    public Action<bool> OnGameWon;
     [HideInInspector]
     public Action OnGameLost;
     [HideInInspector]
@@ -157,9 +158,9 @@ public class GameplayManager : MonoBehaviour
 
         LevelResult result = CalculateResults();
         if (result == LevelResult.None) return;
-        if (result == LevelResult.Won)
+        if (result == LevelResult.Won || result == LevelResult.Perfect)
         {
-            StartCoroutine(GameWon());
+            StartCoroutine(GameWon(result == LevelResult.Perfect));
         }
         else
         {
@@ -189,14 +190,14 @@ public class GameplayManager : MonoBehaviour
         e.Kill();
     }
 
-    IEnumerator GameWon()
+    IEnumerator GameWon(bool perfect)
     {
         StopGame();
         Debug.Log("WON");
         yield return new WaitForSeconds(1.0f);
         if (OnGameWon != null)
         {
-            OnGameWon();
+            OnGameWon(perfect);
         }
     }
 
@@ -394,14 +395,26 @@ public class GameplayManager : MonoBehaviour
 
     public LevelResult CalculateResults()
     {
+        
         if (korokke.korokkeLeft == 0 && escapees == 0)
         {
             return LevelResult.Lost;
         }
-        // All spawners depleted
-        if (pendingSpawners == 0 && pugsLeft == 0)
+        
+        // All spawners depleted and no more pugs left.
+        // TODO: Check if we should factor pug hit count, korokkes or both.
+        // So far using hit count or korokke count is virtually the same, but
+        // maybe we could have some idiot pugs that may escape without touching the korokke.
+        if (pendingSpawners == 0 && pugs.Count == 0)
         {
-            return LevelResult.Won;
+            if (korokke.korokkeLeft == korokke.maxKorokke)
+            {
+                return LevelResult.Perfect;
+            }
+            else
+            {
+                return LevelResult.Won;
+            }
         }
         return LevelResult.None;
     }

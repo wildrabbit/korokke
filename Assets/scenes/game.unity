@@ -1382,6 +1382,7 @@ MonoBehaviour:
   popupWin: {fileID: 229376259}
   buttonWin: {fileID: 248745160}
   winDesc: {fileID: 1591122572}
+  winTitle: {fileID: 1687538186}
   buttonWinLabel: {fileID: 92579270}
   popupLose: {fileID: 115937238}
   buttonLose: {fileID: 1167337134}

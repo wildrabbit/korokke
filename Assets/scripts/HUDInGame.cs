@@ -8,8 +8,12 @@ public class HUDInGame : MonoBehaviour {
     public const string pugMsg = "Remaining pugs: {0:000}";
     public const string korokkeMsg= "Korokkes left: {0:000}";
     public const string beatGameVictoryPopup = "The pugs are gone for good this time!";
-    public const string defaultVictoryPopup = "You're scared the pugs away! Ready for their next attempt?";
+    public const string defaultVictoryPopup = "You've scared the pugs away{0}! Ready for their next attempt?";
+    public const string extraDefaultPopup = " and kept all the korokkes";
     public const string levelTitle = "Level {0}: {1}";
+
+    public const string perfectVictoryTitle = "Brilliant!";
+    public const string defaultVictoryTitle = "Well done!";
 
     public const string defaultButtonWin = "Of course!";
     public const string beatGameButtonWin = "Awesome!";
@@ -21,6 +25,7 @@ public class HUDInGame : MonoBehaviour {
     public RectTransform popupWin;
     public Button buttonWin;
     public Text winDesc;
+    public Text winTitle;
     public Text buttonWinLabel;
 
     public RectTransform popupLose;
@@ -103,7 +108,7 @@ public class HUDInGame : MonoBehaviour {
         buttonEnd.onClick.AddListener(OnGameOverClicked);
     }
 
-    public void ShowVictoryPopup()
+    public void ShowVictoryPopup(bool perfect)
     {
         popupWin.gameObject.SetActive(true);
 
@@ -114,8 +119,9 @@ public class HUDInGame : MonoBehaviour {
         }
         else
         {
-            winDesc.text = defaultVictoryPopup;
+            winDesc.text = string.Format(defaultVictoryPopup, perfect ? extraDefaultPopup : "");
             buttonWinLabel.text = defaultButtonWin;
+            winTitle.text = perfect ? perfectVictoryTitle : defaultVictoryTitle;
         }
         
         buttonWin.onClick.AddListener(OnWinButtonClicked);
