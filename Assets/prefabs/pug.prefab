@@ -321,8 +321,8 @@ MonoBehaviour:
     decelType: 3
     decelStrength: 0.2
     mass: 1
-    maxSpeed: 1
-    maxForce: 0.5
+    maxSpeed: 3
+    maxForce: 2
     maxAngularSpeed: 0
     wanderRadius: 8
     wanderDistance: 4
@@ -339,7 +339,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a878a6ff128243dfb1d89ca0273f059, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debugMode: 0
   OnStateChange:
     m_PersistentCalls:
       m_Calls: []

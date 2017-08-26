@@ -55,6 +55,10 @@ public class GameplayManager : MonoBehaviour
     public Action<int> OnPugHit;
     [HideInInspector]
     public Action<int, int> OnGameStarted;
+    [HideInInspector]
+    public Action OnGameWon;
+    [HideInInspector]
+    public Action OnGameLost;
 
     // Use this for initialization
     void Start ()
@@ -156,12 +160,20 @@ public class GameplayManager : MonoBehaviour
     {
         Debug.Log("WON");
         yield return new WaitForSeconds(1.0f);
+        if (OnGameWon != null)
+        {
+            OnGameWon();
+        }
     }
 
     IEnumerator GameLost()
     {
         Debug.Log("LOST");
         yield return new WaitForSeconds(1.0f);
+        if (OnGameLost != null)
+        {
+            OnGameLost();
+        }
     }
 
     void StopGame()
