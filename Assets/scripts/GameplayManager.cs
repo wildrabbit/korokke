@@ -38,6 +38,9 @@ public class GameplayManager : MonoBehaviour
     public float korokkeDistanceThreshold = 0.25f;
     public float korokkeEscapeThreshold = 10.0f;
 
+    SpriteRenderer background;
+    Transform decos;
+
     float spawnerRadius = 1.0f;
     float maxSpeedPercentage = 2.0f;
 
@@ -92,6 +95,7 @@ public class GameplayManager : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
+        Screen.SetResolution(800, 500, false);
         currentScene = defaultScene;
         LoadLevel(currentScene);
 	}
@@ -271,10 +275,24 @@ public class GameplayManager : MonoBehaviour
         levelIdx = cfg.levelIdx;
         levelTitle = cfg.levelName;
         levelDesc = cfg.levelDesc;
-
+        
         korokkeDistanceThreshold = cfg.korokkeStealDistanceThreshold;
         korokkeEscapeThreshold = cfg.korokkeEscapeDistanceThreshold;
         spawnerRadius = cfg.spawnerSpreadRadius;
+
+        GameObject backgroundGO = GameObject.Find("background");
+        if (backgroundGO != null)
+        {
+            background = backgroundGO.GetComponent<SpriteRenderer>();
+            background.transform.SetParent(sceneRoot);
+        }
+
+        GameObject foregroundDecos = GameObject.Find("decos");
+        if (foregroundDecos != null)
+        {
+            decos = foregroundDecos.transform;
+            decos.SetParent(sceneRoot);
+        }
 
         DestroyImmediate(cfg.gameObject);
 

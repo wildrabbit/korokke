@@ -18,8 +18,10 @@ public class HUDInGame : MonoBehaviour {
     public const string defaultButtonWin = "Of course!";
     public const string beatGameButtonWin = "Awesome!";
 
-
+    public RectTransform pugCounterPanel;
     public Text pugCounter;
+
+    public RectTransform korokkeCounterPanel;
     public Text korokkeCounter;
 
     public RectTransform popupWin;
@@ -74,6 +76,7 @@ public class HUDInGame : MonoBehaviour {
 
         OnPugCounterChanged(pugs);
         OnKorokkeCounterChanged(korokke);
+
         ShowLevelIntroPopup();
     }
 
@@ -89,6 +92,8 @@ public class HUDInGame : MonoBehaviour {
 
     public void ShowLevelIntroPopup()
     {
+        pugCounterPanel.gameObject.SetActive(false);
+        korokkeCounterPanel.gameObject.SetActive(false);
         StartCoroutine(ShowLevelIntroCoroutine(gpManager.levelIdx, gpManager.levelTitle, gpManager.levelDesc));
     }
 
@@ -99,6 +104,8 @@ public class HUDInGame : MonoBehaviour {
         levelPopupDesc.text = levelDesc;
         yield return new WaitForSeconds(this.newLevelTime);
         popupNewLevel.gameObject.SetActive(false);
+        pugCounterPanel.gameObject.SetActive(true);
+        korokkeCounterPanel.gameObject.SetActive(true);
         gpManager.Run();
     }
 
