@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour, IEntity
 {
-    public int pugCount = 1;
     public int totalPugs = 1;
     public float totalTime = 1.0f;
     public float spawnNoise = 0.2f;
@@ -29,7 +28,7 @@ public class Spawner : MonoBehaviour, IEntity
     public void StartGame()
     {
         ResetSpawnCounter();
-        pugsLeft = pugCount;
+        pugsLeft = totalPugs;
 
         gameplayManager.pendingSpawners++;
         gameplayManager.pugsLeft += pugsLeft;
@@ -45,15 +44,15 @@ public class Spawner : MonoBehaviour, IEntity
 
     public void LogicUpdate(float dt)
     {
-        if (pugCount == 0) return;
+        if (pugsLeft == 0) return;
 
         elapsed += dt;
         if (elapsed < currentDelay) return;
         
         gameplayManager.SpawnPug(transform.position);
         ResetSpawnCounter();
-        pugCount--;
-        if (pugCount == 0)
+        pugsLeft--;
+        if (pugsLeft == 0)
         {
             // Do something to the spawner
             gameplayManager.ExhaustedSpawner(this);

@@ -11,7 +11,7 @@ public enum BoidDecelerationType
 }
 
 [Serializable]
-public class BoidData
+public class Boid
 {
     public Vector2 pos;
     public Vector2 acceleration;
@@ -27,7 +27,7 @@ public class BoidData
     public float maxForce;
     public float maxAngularSpeed;
 
-    public BoidData target;
+    public Boid target;
 
     public float wanderRadius;
     public float wanderDistance; // Distance the circle is projected in front of the agent!

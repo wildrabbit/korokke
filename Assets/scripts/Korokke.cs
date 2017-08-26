@@ -19,7 +19,7 @@ public class Korokke : MonoBehaviour, IEntity
 
     //SpriteRenderer spriteRendererRef;
     GameplayManager gameplayMgr;
-    public BoidData data;
+    public Boid data;
 
     private void Awake()
     {
@@ -32,8 +32,18 @@ public class Korokke : MonoBehaviour, IEntity
         gameplayMgr = gameplayMgrRef;
         name = gameplayMgr.korokkePrefab.name;
         transform.SetParent(gameplayMgr.sceneRoot);
+    }
+
+    public void LoadData(KorokkeConfig config)
+    {
         data.pos = gameplayMgr.korokkePosition;
         transform.position = data.pos;
+
+        maxKorokke = config.maxKorokkes;
+        korokkeLeft = maxKorokke;
+
+        itemX = config.korokkeItemSpreadX;
+        itemY = config.korokkeItemSpreadY;
     }
 
     // Use this for initialization

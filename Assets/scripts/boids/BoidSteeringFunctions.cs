@@ -4,13 +4,13 @@ using UnityEngine;
 
 public static class BoidSteeringFunctions
 {
-    public static Vector2 Seek(float dt, BoidData data)
+    public static Vector2 Seek(float dt, Boid data)
     {
         Vector2 targetVec = (data.target.pos - data.pos).normalized * data.maxSpeed;
         return targetVec - data.velocity;
     }
 
-    public static Vector2 Flee(BoidData data)
+    public static Vector2 Flee(Boid data)
     {
         if (Vector2.Distance(data.pos, data.target.pos) > 0.0f)
         {
@@ -24,7 +24,7 @@ public static class BoidSteeringFunctions
         }
     }
 
-    public static Vector2 Arrive(BoidData data)
+    public static Vector2 Arrive(Boid data)
     {
         Vector2 toTarget = data.target.pos - data.pos;
         float distance = toTarget.magnitude;
@@ -40,7 +40,7 @@ public static class BoidSteeringFunctions
         return Vector2.zero;
     }
 
-    public static Vector2 Wander(BoidData data)
+    public static Vector2 Wander(Boid data)
     {
         // Start by displacing the target
         data.wanderTarget += new Vector2(Random.Range(-1.0f, 1.0f) * data.wanderJitter, Random.Range(-1.0f, 1.0f) * data.wanderJitter);
@@ -54,7 +54,7 @@ public static class BoidSteeringFunctions
 
     }
 
-    public static Vector2 ApplyJitter(BoidData data, Vector2 force, float jitter, float radius, float distance)
+    public static Vector2 ApplyJitter(Boid data, Vector2 force, float jitter, float radius, float distance)
     {
         Vector2 forceN = force.normalized;
         forceN += new Vector2(Random.Range(-1.0f, 1.0f) * data.wanderJitter, Random.Range(-1.0f, 1.0f) * data.wanderJitter);

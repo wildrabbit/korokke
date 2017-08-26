@@ -12,7 +12,7 @@ enum PugState
 
 public class Pug : MonoBehaviour, IEntity
 {
-    delegate Vector2 SteerFunction(BoidData d);
+    delegate Vector2 SteerFunction(Boid d);
 
     //SpriteRenderer spriteRendererRef;
     GameplayManager gameplayMgr;
@@ -21,7 +21,7 @@ public class Pug : MonoBehaviour, IEntity
     public float defaultViewRotation;
     public float escapeSpeedIncrease = 1.5f;
     public float escapeForceIncrease = 1.2f;
-    public BoidData boidData;
+    public Boid boidData;
 
     PugState state;
 

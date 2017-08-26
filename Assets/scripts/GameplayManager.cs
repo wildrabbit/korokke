@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 using URandom = UnityEngine.Random;
 
@@ -15,28 +16,44 @@ public class GameplayManager : MonoBehaviour
 {
     public static int NextPugID = 0;
 
-    [Header("Config")]
+#region config
+    [Header("Level management")]
+    public string defaultScene;
+    string currentScene;
+    string nextScene;
+    [HideInInspector]
+    public int levelIdx;
+    [HideInInspector]
+    public string levelTitle;
+    [HideInInspector]
+    public string levelDesc;
+    
+    [Header("Scene config")]
     public Transform sceneRoot;
     public Transform pugRoot;
     public Vector3 korokkePosition;
 
+    [Header("Gameplay vars")]
     public float korokkeDistanceThreshold = 0.25f;
     public float korokkeEscapeThreshold = 10.0f;
 
-    public float spawnerRadius = 0.15f;
-    public float maxSpeedPercentage = 2.0f;
+    float spawnerRadius = 1.0f;
+    float maxSpeedPercentage = 2.0f;
 
-    public float boidJitter = 0.1f;
-    public float boidDistance = 2.0f;
-    public float boidRadius = 1.0f;
+    //float boidJitter = 0.1f;
+    //float boidDistance = 2.0f;
+    //float boidRadius = 1.0f;
     //The heading is the target.
 
-    public int pugsLeft = 0;
-    public int pendingSpawners = 0;
-    
     [Header("Prefabs")]
     public Korokke korokkePrefab;
     public Pug pugPrefab;
+
+    [HideInInspector]
+    public int pugsLeft = 0;
+    [HideInInspector]
+    public int pendingSpawners = 0;
+#endregion
 
     List<IEntity> entities;
     Korokke korokke;
@@ -59,12 +76,18 @@ public class GameplayManager : MonoBehaviour
     public Action OnGameWon;
     [HideInInspector]
     public Action OnGameLost;
+    [HideInInspector]
+    public Action OnGameOver;
+    [HideInInspector]
+    public Action OnLevelExit;
+
+    bool loading = false;
 
     // Use this for initialization
     void Start ()
     {
-        BuildLevel();
-        StartGame();
+        currentScene = defaultScene;
+        LoadLevel(currentScene);
 	}
 
     void StartGame()
@@ -74,16 +97,21 @@ public class GameplayManager : MonoBehaviour
             ent.StartGame();
         }
         escapees = 0;
-        running = true;
         if (OnGameStarted != null)
         {
             OnGameStarted(pugsLeft, korokke.korokkeLeft);
         }
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    public void LevelIntroFinished()
     {
+        running = true;
+    }
+
+    // Update is called once per frame
+    void Update ()
+    {
+        if (loading) return;
         if (!running) return;
 
         float delta = Time.deltaTime;
@@ -158,6 +186,7 @@ public class GameplayManager : MonoBehaviour
 
     IEnumerator GameWon()
     {
+        StopGame();
         Debug.Log("WON");
         yield return new WaitForSeconds(1.0f);
         if (OnGameWon != null)
@@ -168,6 +197,7 @@ public class GameplayManager : MonoBehaviour
 
     IEnumerator GameLost()
     {
+        StopGame();
         Debug.Log("LOST");
         yield return new WaitForSeconds(1.0f);
         if (OnGameLost != null)
@@ -185,27 +215,93 @@ public class GameplayManager : MonoBehaviour
         }
     }
 
+    void LoadLevel(string name)
+    {
+        loading = true;
+
+        if (string.IsNullOrEmpty(name))
+        {
+            return;
+        }
+
+        StartCoroutine(LoadLevelAsync(name));
+    }
+
+    IEnumerator LoadLevelAsync(string name)
+    {
+        AsyncOperation asyncOp = SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
+
+        while (!asyncOp.isDone)
+        {
+            yield return null;
+        }
+
+        BuildLevel();
+        StartGame();
+        loading = false;
+        yield return null;
+    }
+
+    public void Run()
+    {
+        running = true;
+    }
+
     void BuildLevel()
     {
         running = false;
+
         entities = new List<IEntity>();
+        entitiesToAdd = new List<IEntity>();
+        entitiesToRemove = new List<IEntity>();
+        
+        LevelConfig cfg = FindObjectOfType<LevelConfig>();
+        if (cfg == null)
+        {
+            return;
+        }
+        nextScene = cfg.nextScene;
+        maxSpeedPercentage = cfg.maxSpeedNoisePercentage;
+        levelIdx = cfg.levelIdx;
+        levelTitle = cfg.levelName;
+        levelDesc = cfg.levelDesc;
+
+        korokkeDistanceThreshold = cfg.korokkeStealDistanceThreshold;
+        korokkeEscapeThreshold = cfg.korokkeEscapeDistanceThreshold;
+        spawnerRadius = cfg.spawnerSpreadRadius;
+
+        DestroyImmediate(cfg.gameObject);
+
+        pugsLeft = 0;
+        pendingSpawners = 0;
+
         BuildGoal();
         BuildSpawners();
         pugs = new List<Pug>();
-        entitiesToAdd = new List<IEntity>();
-        entitiesToRemove = new List<IEntity>();
+
+        
     }
 
     void BuildGoal()
     {
+        KorokkeConfig korokkeCfg = FindObjectOfType<KorokkeConfig>();
+        
         Korokke korokkeInstance = Instantiate<Korokke>(korokkePrefab);
         korokkeInstance.Init(this);
+        korokkeInstance.LoadData(korokkeCfg);
         AddEntity(korokkeInstance);
+
+        DestroyImmediate(korokkeCfg.gameObject);
     }
 
     void BuildSpawners()
     {
-        // TODO: Eventually instantiate, rather than find.
+        GameObject points = GameObject.Find("spawnPoints");
+        if (points != null)
+        {
+            points.transform.SetParent(sceneRoot);
+        }
+        
         spawners = new List<Spawner>();
         Spawner[] sceneSpawners = FindObjectsOfType<Spawner>();
         foreach (Spawner sp in sceneSpawners)
@@ -217,21 +313,36 @@ public class GameplayManager : MonoBehaviour
 
     void ExitLevel()
     {
-        foreach(IEntity ent in entities)
+        if (entities != null)
         {
-            ent.Cleanup();
-            ent.Kill();
+            foreach (IEntity ent in entities)
+            {
+                ent.Cleanup();
+                ent.Kill();
+            }
         }
         entities.Clear();
         entities = null;
         korokke = null;
-        pugs.Clear();
-        pugs = null;
-        spawners.Clear();
-        spawners = null;
+        if (pugs != null)
+        {
+            pugs.Clear();
+            pugs = null;
+        }
+
+        if (spawners != null)
+        {
+            spawners.Clear();
+            spawners = null;
+        }
+
+        if (OnLevelExit != null)
+        {
+            OnLevelExit();
+        }
     }
 
-    public BoidData GetKorokkeMotionData()
+    public Boid GetKorokkeMotionData()
     {
         return korokke.data;
     }
@@ -243,7 +354,7 @@ public class GameplayManager : MonoBehaviour
 
         Vector2 pos = spawnPos;
         float angle = URandom.Range(0, 360);
-        pos.Set(pos.x + Mathf.Cos(angle), pos.y + Mathf.Sin(angle));
+        pos.Set(pos.x + spawnerRadius * Mathf.Cos(angle), pos.y + spawnerRadius * Mathf.Sin(angle));
         p.boidData.pos = pos;
 
         float speedPercent = maxSpeedPercentage * p.boidData.maxSpeed;
@@ -314,6 +425,34 @@ public class GameplayManager : MonoBehaviour
     public void RemoveSpawner(Spawner sp)
     {
         spawners.Remove(sp);
+    }
+
+    public void NextLevel()
+    {
+        ExitLevel();
+        if (!string.IsNullOrEmpty(nextScene))
+        {
+            currentScene = nextScene;
+            LoadLevel(currentScene);
+        }    
+        else
+        {
+            if (OnGameOver != null)
+            {
+                OnGameOver();
+            }
+        }
+    }
+
+    public void RepeatLevel()
+    {
+        ExitLevel();
+        LoadLevel(currentScene);
+    }
+
+    public void ResetGame()
+    {
+        SceneManager.LoadScene(0);
     }
 }
 
