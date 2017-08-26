@@ -469,7 +469,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Well Done!
+  m_Text: Thanks for playing!!
 --- !u!222 &171426201
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1381,6 +1381,8 @@ MonoBehaviour:
   korokkeCounter: {fileID: 46768031}
   popupWin: {fileID: 229376259}
   buttonWin: {fileID: 248745160}
+  winDesc: {fileID: 1591122572}
+  buttonWinLabel: {fileID: 92579270}
   popupLose: {fileID: 115937238}
   buttonLose: {fileID: 1167337134}
   popupEnd: {fileID: 721774177}
@@ -1692,7 +1694,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: You're scared the pugs away! Ready for their next attempt?
+  m_Text: 'You beat the game, congratulations!! :D
+
+    Care for another go?'
 --- !u!222 &1353481927
 CanvasRenderer:
   m_ObjectHideFlags: 0

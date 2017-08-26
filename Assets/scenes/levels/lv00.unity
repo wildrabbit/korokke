@@ -153,6 +153,9 @@ MonoBehaviour:
   korokkeEscapeDistanceThreshold: 10
   spawnerSpreadRadius: 2
   maxSpeedNoisePercentage: 0.15
+  levelName: First steps
+  levelDesc: Don't let the pugs get close to the table!
+  levelIdx: 0
 --- !u!1001 &470453355
 Prefab:
   m_ObjectHideFlags: 0

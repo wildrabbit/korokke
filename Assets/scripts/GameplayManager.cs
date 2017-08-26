@@ -40,6 +40,11 @@ public class GameplayManager : MonoBehaviour
     float spawnerRadius = 1.0f;
     float maxSpeedPercentage = 2.0f;
 
+    public bool LastLevel
+    {
+        get { return !string.IsNullOrEmpty(currentScene) && string.IsNullOrEmpty(nextScene); }
+    }
+
     //float boidJitter = 0.1f;
     //float boidDistance = 2.0f;
     //float boidRadius = 1.0f;

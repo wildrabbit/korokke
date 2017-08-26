@@ -7,8 +7,12 @@ public class HUDInGame : MonoBehaviour {
 
     public const string pugMsg = "Remaining pugs: {0:000}";
     public const string korokkeMsg= "Korokkes left: {0:000}";
-
+    public const string beatGameVictoryPopup = "The pugs are gone for good this time!";
+    public const string defaultVictoryPopup = "You're scared the pugs away! Ready for their next attempt?";
     public const string levelTitle = "Level {0}: {1}";
+
+    public const string defaultButtonWin = "Of course!";
+    public const string beatGameButtonWin = "Awesome!";
 
 
     public Text pugCounter;
@@ -16,6 +20,8 @@ public class HUDInGame : MonoBehaviour {
 
     public RectTransform popupWin;
     public Button buttonWin;
+    public Text winDesc;
+    public Text buttonWinLabel;
 
     public RectTransform popupLose;
     public Button buttonLose;
@@ -100,6 +106,18 @@ public class HUDInGame : MonoBehaviour {
     public void ShowVictoryPopup()
     {
         popupWin.gameObject.SetActive(true);
+
+        if (gpManager.LastLevel)
+        {
+            winDesc.text = beatGameVictoryPopup;
+            buttonWinLabel.text = beatGameButtonWin;
+        }
+        else
+        {
+            winDesc.text = defaultVictoryPopup;
+            buttonWinLabel.text = defaultButtonWin;
+        }
+        
         buttonWin.onClick.AddListener(OnWinButtonClicked);
     }
 

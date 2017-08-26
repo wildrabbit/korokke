@@ -140,6 +140,9 @@ MonoBehaviour:
   korokkeEscapeDistanceThreshold: 10
   spawnerSpreadRadius: 2
   maxSpeedNoisePercentage: 0.15
+  levelName: Pugs are coming
+  levelDesc: The first two pugs were only scouts. More will try to steal our korokkes!
+  levelIdx: 1
 --- !u!4 &64112924
 Transform:
   m_ObjectHideFlags: 0
