@@ -78,9 +78,7 @@ public class Korokke : MonoBehaviour, IEntity
 	
     public void Hit(int damage = 1)
     {
-        Debug.Log("Eating Korokke!");
         korokkeLeft = (damage > korokkeLeft) ? 0 : korokkeLeft - damage;
-        Debug.Log($"Left: {korokkeLeft}");
         int idx = korokkes.Count - 1;
         Transform krok = korokkes[idx];
         korokkes.RemoveAt(idx);

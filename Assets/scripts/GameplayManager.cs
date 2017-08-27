@@ -39,6 +39,12 @@ public class GameplayManager : MonoBehaviour
     public float korokkeEscapeThreshold = 10.0f;
     public float vacuumDistance = 1.5f;
 
+    [Header("Music")]
+    public AudioClip defaultMusic;
+    public AudioClip loseMusic;
+    public AudioClip winMusic;
+    AudioSource musicSource;
+
     public AudioClip tapSound;
 
     SpriteRenderer background;
@@ -104,10 +110,13 @@ public class GameplayManager : MonoBehaviour
         leAudio = GetComponent<AudioSource>();
         currentScene = defaultScene;
         LoadLevel(currentScene);
+
+        musicSource = GameObject.Find("music").GetComponent<AudioSource>();
 	}
 
     void StartGame()
     {
+        PlayMusic(defaultMusic, true);
         foreach(IEntity ent in entities)
         {
             ent.StartGame();
@@ -208,8 +217,8 @@ public class GameplayManager : MonoBehaviour
     IEnumerator GameWon(bool perfect)
     {
         StopGame();
-        Debug.Log("WON");
         yield return new WaitForSeconds(1.0f);
+        PlayMusic(winMusic, false);
         if (OnGameWon != null)
         {
             OnGameWon(perfect);
@@ -219,8 +228,8 @@ public class GameplayManager : MonoBehaviour
     IEnumerator GameLost()
     {
         StopGame();
-        Debug.Log("LOST");
         yield return new WaitForSeconds(1.0f);
+        PlayMusic(loseMusic, false);
         if (OnGameLost != null)
         {
             OnGameLost();
@@ -522,6 +531,13 @@ public class GameplayManager : MonoBehaviour
     private void Restart()
     {
         SceneManager.LoadScene(0);
+    }
+
+    public void PlayMusic(AudioClip clip, bool loop)
+    {
+        musicSource.clip = clip;
+        musicSource.loop = loop;
+        musicSource.Play();
     }
 }
 

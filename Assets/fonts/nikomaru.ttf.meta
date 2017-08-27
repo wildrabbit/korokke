@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 26a004ce270a5ac44804cfecc30ab6f2
+timeCreated: 1503852818
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: 07NikumaruFont
+  fontNames:
+  - 07NikumaruFont
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
