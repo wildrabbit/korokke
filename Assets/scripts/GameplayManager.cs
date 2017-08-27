@@ -416,6 +416,7 @@ public class GameplayManager : MonoBehaviour
             vacuum.gameObject.SetActive(true);
             vacuum.transform.rotation = p.transform.rotation * Quaternion.AngleAxis(180, Vector3.forward);
             vacuum.transform.position = p.boidData.pos + vacuumDistance * p.boidData.heading.normalized;
+            vacuum.GetComponent<VacuumCleaner>().PlayAudio();
         }
 
         pugsLeft--;

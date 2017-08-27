@@ -30,6 +30,8 @@ public class Pug : MonoBehaviour, IEntity
 
     CursorController cursorRef;
 
+    AudioSource leAudio;
+
     PugState state;
 
     public bool Escaping
@@ -48,6 +50,7 @@ public class Pug : MonoBehaviour, IEntity
         animator = GetComponent<Animator>();
         tapGesture = GetComponent<TapGesture>();
         cursorRef = FindObjectOfType<CursorController>();
+        leAudio = GetComponent<AudioSource>();
     }
     public void Init(GameplayManager gpMgr)
     {
@@ -67,6 +70,7 @@ public class Pug : MonoBehaviour, IEntity
 
     public void FreakOut()
     {
+        leAudio.Play();
         animator.SetTrigger("gtfo");
         boidData.maxSpeed *= freakOutSpeedIncrease;
         boidData.maxForce *= freakOutForceIncrease;
