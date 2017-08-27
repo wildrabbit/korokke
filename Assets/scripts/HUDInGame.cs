@@ -142,6 +142,8 @@ public class HUDInGame : MonoBehaviour {
 
     public void ShowGameOverPopup()
     {
+        HideDefeatPopup();
+        HideVictoryPopup();
         popupEnd.gameObject.SetActive(true);
         buttonEnd.onClick.AddListener(OnGameOverClicked);
     }

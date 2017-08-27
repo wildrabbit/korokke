@@ -202,6 +202,6 @@ public class Pug : MonoBehaviour, IEntity
     public void LateToParty()
     {
         animator.SetTrigger("steal_other");
-        tapGesture.OnTap.RemoveAllListeners();
+        tapGesture.Tapped -= OnTap;
     }
 }
