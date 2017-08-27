@@ -134,26 +134,24 @@ public class GameplayManager : MonoBehaviour
         }
 
         int eatenCroquettes = 0;
+        bool finished = korokke.korokkeLeft == 0;
         foreach (Pug p in pugs)
         {
             if (p.Escaping || p.FreakingOut) continue;
 
-            if (Vector2.Distance(p.boidData.pos, korokke.data.pos) < korokkeDistanceThreshold)
+            if (finished)
             {
-                if (korokke.korokkeLeft == 0)
+                p.LateToParty();
+            }
+            else if (Vector2.Distance(p.boidData.pos, korokke.data.pos) < korokkeDistanceThreshold)
+            {
+                korokke.Hit();
+                p.StoleKorokke();
+                escapees++;
+                eatenCroquettes++;
+                if (OnKorokkeStolen != null)
                 {
-                    p.LateToParty();
-                }
-                else
-                {
-                    korokke.Hit();
-                    p.StoleKorokke();
-                    escapees++;
-                    eatenCroquettes++;
-                    if (OnKorokkeStolen != null)
-                    {
-                        OnKorokkeStolen(korokke.korokkeLeft);
-                    }
+                    OnKorokkeStolen(korokke.korokkeLeft);
                 }
             }
         }
