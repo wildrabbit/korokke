@@ -37,9 +37,11 @@ public class GameplayManager : MonoBehaviour
     [Header("Gameplay vars")]
     public float korokkeDistanceThreshold = 0.25f;
     public float korokkeEscapeThreshold = 10.0f;
+    public float vacuumDistance = 1.5f;
 
     SpriteRenderer background;
     Transform decos;
+    Animator vacuum;
 
     float spawnerRadius = 1.0f;
     float maxSpeedPercentage = 2.0f;
@@ -57,6 +59,7 @@ public class GameplayManager : MonoBehaviour
     [Header("Prefabs")]
     public Korokke korokkePrefab;
     public Pug pugPrefab;
+    public Animator vacuumPrefab;
 
     [HideInInspector]
     public int pugsLeft = 0;
@@ -95,7 +98,7 @@ public class GameplayManager : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
-        Screen.SetResolution(800, 500, false);
+        //Screen.SetResolution(800, 600, false);
         currentScene = defaultScene;
         LoadLevel(currentScene);
 	}
@@ -303,7 +306,11 @@ public class GameplayManager : MonoBehaviour
         BuildSpawners();
         pugs = new List<Pug>();
 
-        
+        if (vacuumPrefab != null)
+        {
+            vacuum = Instantiate<Animator>(vacuumPrefab);
+            vacuum.gameObject.SetActive(false);
+        }        
     }
 
     void BuildGoal()
@@ -397,12 +404,23 @@ public class GameplayManager : MonoBehaviour
     public void PugTapped(Pug p)
     {
         // Replace with coroutine
+        if (vacuum != null)
+        {
+            vacuum.gameObject.SetActive(true);
+            vacuum.transform.rotation = p.transform.rotation * Quaternion.AngleAxis(180, Vector3.forward);
+            vacuum.transform.position = p.boidData.pos + vacuumDistance * p.boidData.heading.normalized;
+        }
+
         pugsLeft--;
-        entitiesToRemove.Add(p);
         if (OnPugHit != null)
         {
             OnPugHit(pugsLeft);
         }
+    }
+
+    public void FreakedPugEscaped(Pug p)
+    {
+        entitiesToRemove.Add(p);
     }
 
     public void PugEscaped(Pug p)

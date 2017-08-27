@@ -1407,7 +1407,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
-  m_SortingLayerID: -638337171
+  m_SortingLayerID: 558396531
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!224 &1138459153
@@ -2425,7 +2425,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26780ea96227f8f4798ea7752f691ca3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultScene: lv00
+  defaultScene: lv01
   levelIdx: 0
   levelTitle: 
   levelDesc: 
@@ -2434,9 +2434,12 @@ MonoBehaviour:
   korokkePosition: {x: 0, y: 0, z: 0}
   korokkeDistanceThreshold: 0.8
   korokkeEscapeThreshold: 10
+  vacuumDistance: 1.5
   korokkePrefab: {fileID: 114807190332247364, guid: a2a28d1c104884641b826eca9699b1c6,
     type: 2}
-  pugPrefab: {fileID: 114104090520184960, guid: 5242fcda0fb8aab4b8a847686149bbd9,
+  pugPrefab: {fileID: 114023719802812688, guid: 0fb72046b0405d544a906cd0bec2bb7d,
+    type: 2}
+  vacuumPrefab: {fileID: 95017813272593314, guid: cb31bfe809c8da247bad31727bb025a9,
     type: 2}
   pugsLeft: 0
   pendingSpawners: 0

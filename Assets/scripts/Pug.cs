@@ -7,7 +7,8 @@ using TouchScript.Gestures;
 enum PugState
 {
     SeekKorokke = 0,
-    Escape
+    Escape,
+    FreakOut,
 }
 
 public class Pug : MonoBehaviour, IEntity
@@ -21,6 +22,8 @@ public class Pug : MonoBehaviour, IEntity
     public float defaultViewRotation;
     public float escapeSpeedIncrease = 1.5f;
     public float escapeForceIncrease = 1.2f;
+    public float freakOutSpeedIncrease = 2.5f;
+    public float freakOutForceIncrease = 2.0f;
     public Boid boidData;
 
     PugState state;
@@ -28,6 +31,11 @@ public class Pug : MonoBehaviour, IEntity
     public bool Escaping
     {
         get { return state == PugState.Escape; }
+    }
+
+    public bool FreakingOut
+    {
+        get { return state == PugState.FreakOut; }
     }
 
 
@@ -52,9 +60,18 @@ public class Pug : MonoBehaviour, IEntity
         state = PugState.SeekKorokke;
     }
 
+    public void FreakOut()
+    {
+        // TODO: Change animation
+        boidData.maxSpeed *= freakOutSpeedIncrease;
+        boidData.maxForce *= freakOutForceIncrease;
+        tapGesture.Tapped -= OnTap;
+        state = PugState.FreakOut;
+    }
+
     public void OnTap(object o, EventArgs args)
     {
-        // Check type, whatever...
+        FreakOut();
         gameplayMgr.PugTapped(this);
     }
 
@@ -79,10 +96,18 @@ public class Pug : MonoBehaviour, IEntity
                     break;
                 }
             case PugState.Escape:
+            case PugState.FreakOut:
                 {
                     if (boidData.target != null && Vector2.Distance(boidData.pos, boidData.target.pos) > gameplayMgr.korokkeEscapeThreshold)
                     {
-                        gameplayMgr.PugEscaped(this);
+                        if (state == PugState.Escape)
+                        {
+                            gameplayMgr.PugEscaped(this);
+                        }
+                        else
+                        {
+                            gameplayMgr.FreakedPugEscaped(this);
+                        }
                     }
                     break;
                 }
@@ -107,7 +132,7 @@ public class Pug : MonoBehaviour, IEntity
 
     Vector2 CalculateTotalSteering(float dt)
     {
-        SteerFunction[] functions = new SteerFunction[] { BoidSteeringFunctions.Arrive, BoidSteeringFunctions.Flee};
+        SteerFunction[] functions = new SteerFunction[] { BoidSteeringFunctions.Arrive, BoidSteeringFunctions.Flee, BoidSteeringFunctions.Flee};
         Vector2 result = functions[(int)state](boidData); // BoidSteeringFunctions.ApplyJitter(boidData, functions[(int)state](boidData), gameplayMgr.boidJitter, gameplayMgr.boidRadius, gameplayMgr.boidDistance);
         return result;
     }
