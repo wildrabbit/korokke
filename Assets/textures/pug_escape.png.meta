@@ -1,13 +1,13 @@
 fileFormatVersion: 2
-guid: 000ac229019d2f04fa241661c6acd8a0
-timeCreated: 1503796770
+guid: 0571ea8a15537db4ab92f55cd6dc49f0
+timeCreated: 1503796716
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: pug_run_0
-    21300002: pug_run_1
-    21300004: pug_run_2
-    21300006: pug_run_3
+    21300000: pug_escape_0
+    21300002: pug_escape_1
+    21300004: pug_escape_2
+    21300006: pug_escape_3
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -95,7 +95,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: pug_run_0
+      name: pug_escape_0
       rect:
         serializedVersion: 2
         x: 0
@@ -103,13 +103,13 @@ TextureImporter:
         width: 256
         height: 512
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: pug_run_1
+      name: pug_escape_1
       rect:
         serializedVersion: 2
         x: 256
@@ -117,13 +117,13 @@ TextureImporter:
         width: 256
         height: 512
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: pug_run_2
+      name: pug_escape_2
       rect:
         serializedVersion: 2
         x: 512
@@ -131,13 +131,13 @@ TextureImporter:
         width: 256
         height: 512
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: pug_run_3
+      name: pug_escape_3
       rect:
         serializedVersion: 2
         x: 768
@@ -145,7 +145,7 @@ TextureImporter:
         width: 256
         height: 512
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
