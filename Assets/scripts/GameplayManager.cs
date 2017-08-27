@@ -39,7 +39,10 @@ public class GameplayManager : MonoBehaviour
     public float korokkeEscapeThreshold = 10.0f;
     public float vacuumDistance = 1.5f;
 
+    public AudioClip tapSound;
+
     SpriteRenderer background;
+    AudioSource leAudio;
     Transform decos;
     Animator vacuum;
 
@@ -98,7 +101,7 @@ public class GameplayManager : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
-        //Screen.SetResolution(800, 600, false);
+        leAudio = GetComponent<AudioSource>();
         currentScene = defaultScene;
         LoadLevel(currentScene);
 	}
@@ -408,6 +411,7 @@ public class GameplayManager : MonoBehaviour
 
     public void PugTapped(Pug p)
     {
+        leAudio.PlayOneShot(tapSound);
         // Replace with coroutine
         if (vacuum != null)
         {
@@ -511,6 +515,11 @@ public class GameplayManager : MonoBehaviour
     }
 
     public void ResetGame()
+    {
+        Invoke("Restart", 1.0f);        
+    }
+
+    private void Restart()
     {
         SceneManager.LoadScene(0);
     }

@@ -18,6 +18,14 @@ public class HUDInGame : MonoBehaviour {
     public const string defaultButtonWin = "Of course!";
     public const string beatGameButtonWin = "Awesome!";
 
+    public float defaultSoundLevel = 0.4f;
+
+    public Sprite soundOn;
+    public Sprite soundOff;
+
+    public Image iconBtnSound;
+    public Button btnSound;
+
     public RectTransform pugCounterPanel;
     public Text pugCounter;
 
@@ -36,15 +44,19 @@ public class HUDInGame : MonoBehaviour {
     public RectTransform popupEnd;
     public Button buttonEnd;
 
+    public AudioClip soundButtonClicked;
+
     public RectTransform popupNewLevel;
     public float newLevelTime = 2.0f;
     public Text levelPopupTitle;
     public Text levelPopupDesc;
 
     GameplayManager gpManager;
+    AudioSource audioSrc;
 
     void Awake()
     {
+        audioSrc = GetComponent<AudioSource>();
         gpManager = FindObjectOfType<GameplayManager>();
     }
 
@@ -57,6 +69,9 @@ public class HUDInGame : MonoBehaviour {
         gpManager.OnGameLost += ShowDefeatPopup;
         gpManager.OnLevelExit += OnLevelExited;
         gpManager.OnGameOver += ShowGameOverPopup;
+
+        btnSound.onClick.AddListener(ToggleSoundClicked);
+        RefreshButtonIcon();        
     }
 
     private void OnDestroy()
@@ -67,12 +82,27 @@ public class HUDInGame : MonoBehaviour {
         gpManager.OnGameWon -= ShowVictoryPopup;
         gpManager.OnGameLost -= ShowDefeatPopup;
         gpManager.OnLevelExit -= OnLevelExited;
+
+        btnSound.onClick.RemoveAllListeners();
+    }
+
+    void ToggleSoundClicked()
+    {
+        AudioListener.volume = Mathf.Approximately(AudioListener.volume, 0.0f) ? defaultSoundLevel : 0.0f;
+        audioSrc.PlayOneShot(soundButtonClicked);
+        RefreshButtonIcon();
+    }
+
+    void RefreshButtonIcon()
+    {
+        iconBtnSound.sprite = Mathf.Approximately(AudioListener.volume, 0.0f) ? soundOff : soundOn;
     }
 
     void GameStart(int pugs, int korokke)
     {
         HideVictoryPopup();
         HideDefeatPopup();
+        btnSound.gameObject.SetActive(false);
 
         OnPugCounterChanged(pugs);
         OnKorokkeCounterChanged(korokke);
@@ -106,6 +136,7 @@ public class HUDInGame : MonoBehaviour {
         popupNewLevel.gameObject.SetActive(false);
         pugCounterPanel.gameObject.SetActive(true);
         korokkeCounterPanel.gameObject.SetActive(true);
+        btnSound.gameObject.SetActive(true);
         gpManager.Run();
     }
 
@@ -160,15 +191,18 @@ public class HUDInGame : MonoBehaviour {
 
     public void OnWinButtonClicked()
     {
+        audioSrc.PlayOneShot(soundButtonClicked);
         gpManager.NextLevel();
     }
     public void OnLoseButtonClicked()
     {
+        audioSrc.PlayOneShot(soundButtonClicked);
         gpManager.RepeatLevel();
     }
 
     public void OnGameOverClicked()
     {
+        audioSrc.PlayOneShot(soundButtonClicked);
         gpManager.ResetGame();
     }
 }

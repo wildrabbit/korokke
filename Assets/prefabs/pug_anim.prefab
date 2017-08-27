@@ -189,6 +189,9 @@ MonoBehaviour:
     wanderDistance: 4
     wanderJitter: 4
     wanderTarget: {x: 0, y: 0}
+  escapeSound: {fileID: 8300000, guid: fab95a2295263cf4c9b046cd32b08e39, type: 3}
+  tappedSound: {fileID: 8300000, guid: fe3841ee94eaffc459d697a651d7b3fe, type: 3}
+  bark: {fileID: 0}
 --- !u!114 &114865619091420976
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -200,7 +203,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a878a6ff128243dfb1d89ca0273f059, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debugMode: 0
   OnStateChange:
     m_PersistentCalls:
       m_Calls: []

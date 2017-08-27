@@ -72,6 +72,8 @@ MonoBehaviour:
   defaultViewRotation: 90
   escapeSpeedIncrease: 3
   escapeForceIncrease: 2
+  freakOutSpeedIncrease: 2.5
+  freakOutForceIncrease: 2
   boidData:
     pos: {x: 0, y: 0}
     acceleration: {x: 0, y: 0}
@@ -88,6 +90,9 @@ MonoBehaviour:
     wanderDistance: 4
     wanderJitter: 4
     wanderTarget: {x: 0, y: 0}
+  escapeSound: {fileID: 8300000, guid: fab95a2295263cf4c9b046cd32b08e39, type: 3}
+  tappedSound: {fileID: 8300000, guid: fe3841ee94eaffc459d697a651d7b3fe, type: 3}
+  bark: {fileID: 0}
 --- !u!114 &114467015499577752
 MonoBehaviour:
   m_ObjectHideFlags: 1

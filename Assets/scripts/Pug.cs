@@ -28,6 +28,10 @@ public class Pug : MonoBehaviour, IEntity
     public float freakOutForceIncrease = 2.0f;
     public Boid boidData;
 
+    public AudioClip escapeSound;
+    public AudioClip tappedSound;
+    public AudioClip bark; // When it enter the screen?
+
     CursorController cursorRef;
 
     AudioSource leAudio;
@@ -70,7 +74,7 @@ public class Pug : MonoBehaviour, IEntity
 
     public void FreakOut()
     {
-        leAudio.Play();
+        leAudio.PlayOneShot(tappedSound);
         animator.SetTrigger("gtfo");
         boidData.maxSpeed *= freakOutSpeedIncrease;
         boidData.maxForce *= freakOutForceIncrease;
@@ -154,6 +158,7 @@ public class Pug : MonoBehaviour, IEntity
     public void StoleKorokke()
     {
         animator.SetTrigger("steal");
+        leAudio.PlayOneShot(escapeSound);
         boidData.maxSpeed *= escapeSpeedIncrease;
         boidData.maxForce *= escapeForceIncrease;
         tapGesture.Tapped -= OnTap;
@@ -197,5 +202,6 @@ public class Pug : MonoBehaviour, IEntity
     public void LateToParty()
     {
         animator.SetTrigger("steal_other");
+        tapGesture.OnTap.RemoveAllListeners();
     }
 }
