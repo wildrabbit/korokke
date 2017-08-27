@@ -26,6 +26,8 @@ public class Pug : MonoBehaviour, IEntity
     public float freakOutForceIncrease = 2.0f;
     public Boid boidData;
 
+    CursorController cursorRef;
+
     PugState state;
 
     public bool Escaping
@@ -43,6 +45,7 @@ public class Pug : MonoBehaviour, IEntity
     {
         //spriteRendererRef = GetComponent<SpriteRenderer>();
         tapGesture = GetComponent<TapGesture>();
+        cursorRef = FindObjectOfType<CursorController>();
     }
     public void Init(GameplayManager gpMgr)
     {
@@ -170,5 +173,17 @@ public class Pug : MonoBehaviour, IEntity
     public void OnEntityRemoved()
     {
         gameplayMgr.RemovePug(this);
+    }
+
+    public void OnMouseEnter()
+    {
+        if (cursorRef == null) return;
+
+        cursorRef.SetOnTarget(transform);
+    }
+
+    public void OnMouseExit()
+    {
+        cursorRef.SetOnTarget(null);
     }
 }
