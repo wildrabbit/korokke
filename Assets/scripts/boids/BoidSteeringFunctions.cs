@@ -10,7 +10,12 @@ public static class BoidSteeringFunctions
         return targetVec - data.velocity;
     }
 
-    public static Vector2 Flee(Boid data)
+    public static Vector2 Idle(Boid data)
+    {
+        return Vector2.zero;
+    }
+
+        public static Vector2 Flee(Boid data)
     {
         if (Vector2.Distance(data.pos, data.target.pos) > 0.0f)
         {

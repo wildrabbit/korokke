@@ -85,6 +85,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Bark.cs" />
+    <Compile Include="Assets\CreditsController.cs" />
     <Compile Include="Assets\scripts\boids\Boid.cs" />
     <Compile Include="Assets\scripts\boids\BoidSteeringFunctions.cs" />
     <Compile Include="Assets\scripts\CursorController.cs" />

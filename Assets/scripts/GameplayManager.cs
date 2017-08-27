@@ -300,6 +300,11 @@ public class GameplayManager : MonoBehaviour
         korokkeEscapeThreshold = cfg.korokkeEscapeDistanceThreshold;
         spawnerRadius = cfg.spawnerSpreadRadius;
 
+        if (background != null)
+        {
+            Destroy(background.gameObject);
+        }
+
         GameObject backgroundGO = GameObject.Find("background");
         if (backgroundGO != null)
         {
@@ -307,6 +312,10 @@ public class GameplayManager : MonoBehaviour
             background.transform.SetParent(sceneRoot);
         }
 
+        if (decos != null)
+        {
+            Destroy(decos.gameObject);
+        }
         GameObject foregroundDecos = GameObject.Find("decos");
         if (foregroundDecos != null)
         {
@@ -323,7 +332,7 @@ public class GameplayManager : MonoBehaviour
         BuildSpawners();
         pugs = new List<Pug>();
 
-        if (vacuumPrefab != null)
+        if (vacuumPrefab != null && vacuum == null)
         {
             vacuum = Instantiate<Animator>(vacuumPrefab);
             vacuum.gameObject.SetActive(false);
@@ -505,6 +514,7 @@ public class GameplayManager : MonoBehaviour
         ExitLevel();
         if (!string.IsNullOrEmpty(nextScene))
         {
+            StartCoroutine(UnloadPreviousScene(currentScene));
             currentScene = nextScene;
             LoadLevel(currentScene);
         }    
@@ -517,9 +527,19 @@ public class GameplayManager : MonoBehaviour
         }
     }
 
+    IEnumerator UnloadPreviousScene(string name)
+    {
+        AsyncOperation unloadOp = SceneManager.UnloadSceneAsync(currentScene);
+        while (!unloadOp.isDone)
+        {
+            yield return null;
+        }
+    }
+
     public void RepeatLevel()
     {
         ExitLevel();
+        StartCoroutine(UnloadPreviousScene(currentScene));
         LoadLevel(currentScene);
     }
 
@@ -530,7 +550,7 @@ public class GameplayManager : MonoBehaviour
 
     private void Restart()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene("credits");
     }
 
     public void PlayMusic(AudioClip clip, bool loop)

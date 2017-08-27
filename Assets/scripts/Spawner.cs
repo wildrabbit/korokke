@@ -8,12 +8,15 @@ public class Spawner : MonoBehaviour, IEntity
     public float totalTime = 1.0f;
     public float spawnNoise = 0.2f;
     public float minDelay = 0.1f;
+    public float startDelay = 0.0f;
 
     GameplayManager gameplayManager;
 
+    bool started = false;
     int pugsLeft;
     float elapsed;
     float currentDelay;
+    float startElapsed;
 
     public bool Depleted
     {
@@ -32,6 +35,12 @@ public class Spawner : MonoBehaviour, IEntity
 
         gameplayManager.pendingSpawners++;
         gameplayManager.pugsLeft += pugsLeft;
+        bool hasDelay = startDelay > 0.0f;
+        started = !hasDelay;
+        if (hasDelay)
+        {
+            startElapsed = 0.0f;            
+        }
     }
 
     void ResetSpawnCounter()
@@ -44,6 +53,16 @@ public class Spawner : MonoBehaviour, IEntity
 
     public void LogicUpdate(float dt)
     {
+        if (!started)
+        {
+            startElapsed += dt;
+            if (startElapsed > startDelay)
+            {
+                started = true;
+            }
+            else return;
+        }
+
         if (pugsLeft == 0) return;
 
         elapsed += dt;

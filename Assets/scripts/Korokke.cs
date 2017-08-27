@@ -36,7 +36,7 @@ public class Korokke : MonoBehaviour, IEntity
 
     public void LoadData(KorokkeConfig config)
     {
-        data.pos = gameplayMgr.korokkePosition;
+        data.pos = config.transform.position;
         transform.position = data.pos;
 
         maxKorokke = config.maxKorokkes;
@@ -55,7 +55,7 @@ public class Korokke : MonoBehaviour, IEntity
         {
             Transform krok = Instantiate<Transform>(korokkeItemPrefab);
             krok.SetParent(plate);
-            Vector2 pos = krok.position;
+            Vector2 pos = transform.position;
             pos.x += Random.Range(-itemX, itemX);
             pos.y += Random.Range(-itemY, itemY);
             krok.position = pos;

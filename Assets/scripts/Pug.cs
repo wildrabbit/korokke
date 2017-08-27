@@ -9,6 +9,7 @@ enum PugState
     SeekKorokke = 0,
     Escape,
     FreakOut,
+    Idle
 }
 
 public class Pug : MonoBehaviour, IEntity
@@ -100,6 +101,10 @@ public class Pug : MonoBehaviour, IEntity
 
         switch (state)
         {
+            case PugState.Idle:
+                {
+                    return;
+                }
             case PugState.SeekKorokke:
                 {
                     if (boidData.target == null || Vector2.Distance(boidData.pos, boidData.target.pos) < gameplayMgr.korokkeDistanceThreshold)
@@ -145,9 +150,8 @@ public class Pug : MonoBehaviour, IEntity
 
     Vector2 CalculateTotalSteering(float dt)
     {
-        SteerFunction[] functions = new SteerFunction[] { BoidSteeringFunctions.Arrive, BoidSteeringFunctions.Flee, BoidSteeringFunctions.Flee};
-        Vector2 result = functions[(int)state](boidData); // BoidSteeringFunctions.ApplyJitter(boidData, functions[(int)state](boidData), gameplayMgr.boidJitter, gameplayMgr.boidRadius, gameplayMgr.boidDistance);
-        return result;
+        SteerFunction[] functions = new SteerFunction[] { BoidSteeringFunctions.Arrive, BoidSteeringFunctions.Flee, BoidSteeringFunctions.Flee, BoidSteeringFunctions.Idle};        
+        return functions[(int)state](boidData); // BoidSteeringFunctions.ApplyJitter(boidData, functions[(int)state](boidData), gameplayMgr.boidJitter, gameplayMgr.boidRadius, gameplayMgr.boidDistance);
     }
 
     public void StopGame()
@@ -203,5 +207,6 @@ public class Pug : MonoBehaviour, IEntity
     {
         animator.SetTrigger("steal_other");
         tapGesture.Tapped -= OnTap;
+        state = PugState.Idle;
     }
 }

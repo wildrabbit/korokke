@@ -1122,7 +1122,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Of course!
+  m_Text: Nice!
 --- !u!222 &744701539
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1853,9 +1853,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'You beat the game, congratulations!! :D
-
-    Care for another go?'
+  m_Text: You beat the game, congratulations!!
 --- !u!222 &1353481927
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2135,7 +2133,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1500382350
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2241,7 +2239,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1526360020
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3127,7 +3125,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1985579542
 RectTransform:
   m_ObjectHideFlags: 0

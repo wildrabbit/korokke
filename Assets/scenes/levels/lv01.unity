@@ -222,7 +222,7 @@ MonoBehaviour:
   nextScene: lv02
   korokkeStealDistanceThreshold: 0.8
   korokkeEscapeDistanceThreshold: 10
-  spawnerSpreadRadius: 2
+  spawnerSpreadRadius: 1
   maxSpeedNoisePercentage: 0.15
   levelName: First steps
   levelDesc: Don't let the pugs get close to the table!

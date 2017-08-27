@@ -5,7 +5,7 @@ using TouchScript.Gestures;
 
 public class HintControl : MonoBehaviour
 {
-    public AudioSource tapSource;
+    AudioSource tapSource;
     public Animator sceneAnim;
     public GameObject hint;
     public float hintDelay = 3.0f;
@@ -18,6 +18,7 @@ public class HintControl : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
+        Cursor.visible = true;
         tap = GetComponent<TapGesture>();
         tapSource = GetComponent<AudioSource>();
         elapsed = 0.0f;
