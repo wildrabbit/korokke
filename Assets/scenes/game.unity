@@ -1465,7 +1465,7 @@ MonoBehaviour:
   buttonLose: {fileID: 1167337134}
   popupEnd: {fileID: 721774177}
   buttonEnd: {fileID: 47093447}
-  soundButtonClicked: {fileID: 8300000, guid: a4fe1a4cf7de2254c9313d986a47b18c, type: 3}
+  soundButtonClicked: {fileID: 8300000, guid: 7f95960442e6e5547a44385c19479d61, type: 3}
   popupNewLevel: {fileID: 1308873005}
   newLevelTime: 2
   levelPopupTitle: {fileID: 465237880}
@@ -2725,7 +2725,7 @@ MonoBehaviour:
   korokkeDistanceThreshold: 0.8
   korokkeEscapeThreshold: 10
   vacuumDistance: 1.5
-  tapSound: {fileID: 8300000, guid: fd23344f771966644a2f5060893cdc30, type: 3}
+  tapSound: {fileID: 8300000, guid: 7f95960442e6e5547a44385c19479d61, type: 3}
   korokkePrefab: {fileID: 114807190332247364, guid: a2a28d1c104884641b826eca9699b1c6,
     type: 2}
   pugPrefab: {fileID: 114023719802812688, guid: 0fb72046b0405d544a906cd0bec2bb7d,
