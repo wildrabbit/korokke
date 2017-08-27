@@ -19,6 +19,8 @@ public class Pug : MonoBehaviour, IEntity
     GameplayManager gameplayMgr;
     TapGesture tapGesture;
 
+    Animator animator;
+
     public float defaultViewRotation;
     public float escapeSpeedIncrease = 1.5f;
     public float escapeForceIncrease = 1.2f;
@@ -43,7 +45,7 @@ public class Pug : MonoBehaviour, IEntity
 
     private void Awake()
     {
-        //spriteRendererRef = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
         tapGesture = GetComponent<TapGesture>();
         cursorRef = FindObjectOfType<CursorController>();
     }
@@ -65,7 +67,7 @@ public class Pug : MonoBehaviour, IEntity
 
     public void FreakOut()
     {
-        // TODO: Change animation
+        animator.SetTrigger("gtfo");
         boidData.maxSpeed *= freakOutSpeedIncrease;
         boidData.maxForce *= freakOutForceIncrease;
         tapGesture.Tapped -= OnTap;
@@ -147,6 +149,7 @@ public class Pug : MonoBehaviour, IEntity
 
     public void StoleKorokke()
     {
+        animator.SetTrigger("steal");
         boidData.maxSpeed *= escapeSpeedIncrease;
         boidData.maxForce *= escapeForceIncrease;
         tapGesture.Tapped -= OnTap;
@@ -185,5 +188,10 @@ public class Pug : MonoBehaviour, IEntity
     public void OnMouseExit()
     {
         cursorRef.SetOnTarget(null);
+    }
+
+    public void LateToParty()
+    {
+        animator.SetTrigger("steal_other");
     }
 }
